@@ -1,0 +1,34 @@
+Resultados esperados:
+Dado o prompt de uma imagem, os dados que nosso modelo de ML retornará será:
+
+{
+    "imageName" : "noite_estrelada.png",
+    "aiGenerated" : 0.0f - 1.0f,
+    "possiblePaintor": "van gogh",
+    "artStyle": ["expressionism", "german expressionism"],
+    "relatedPaintors" : ["Edward Munch", "Van Gogh", "Anita Malfatti", "Franz Marc", "Paul Klee"]
+}
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Dados para treinar o modelo de ML:
+
+"image": {
+    "name": "Paintor",
+    "artStyle": ["expressionism", "german expressionism"],
+    "relatedPaintors" : ["Edward Munch", "Van Gogh", "Anita Malfatti", "Franz Marc", "Paul Klee"]
+    "elements": ["sky", "trees", "night", "moon"]
+}
+
+armazenado pós processamento: {
+    "imageProcessedFeatures" : {
+        "imageColorMean" 131,
+        "isBinirazied": true
+        "size": 1024 (standardized),
+        "imageColorHistogram" : histogram,
+        "threshold_binarization": 431,
+        "blurAmount" : 313
+    }
+}
+
+fazer um fluxograma 

@@ -1,0 +1,7 @@
+{
+    "imageName" : "noite_estrelada.png",
+    "aiGenerated" : 0.5,
+    "possiblePaintor": "van gogh",
+    "artStyle": ["expressionism", "german expressionism"],
+    "relatedPaintors" : ["Edward Munch", "Van Gogh", "Anita Malfatti", "Franz Marc", "Paul Klee"]
+}

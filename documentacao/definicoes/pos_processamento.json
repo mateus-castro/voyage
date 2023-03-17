@@ -1,0 +1,14 @@
+{
+    "name": "Paintor",
+    "artStyle": ["expressionism", "german expressionism"],
+    "relatedPaintors" : ["Edward Munch", "Van Gogh", "Anita Malfatti", "Franz Marc", "Paul Klee"],
+    "elements" : ["sky", "trees", "night", "moon"],
+    "imageProcessedFeatures" : {
+        "imageColorMean" : 13,
+        "isBinirazied": true,
+        "size": 1024 ,
+        "imageColorHistogram" : [[45454545454, 54545454, 54545454, 545454], [3232323232, 32323232, 323232, 2123232]],
+        "threshold_binarization": 431,
+        "blurAmount" : 313
+    }
+}
