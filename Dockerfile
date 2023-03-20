@@ -23,4 +23,4 @@ EXPOSE 27017
 CMD ["mongod", "--config", "/etc/mongodb.conf"]
 
 # Instalar o cliente do mongo pra poder acessá-lo
-RUN apt-get update && apt-get -y install mongodb-clients
+# RUN apt-get update && apt-get -y install mongodb-clients
