@@ -54,7 +54,7 @@ def main():
     final_json = json.dumps(metadata_str)
     sucess, encoded_image = cv2.imencode('.jpg', binarized)
     if sucess:
-        client = MongoClient('mongodb://<user>:<password>@<mongo_container_name>:27017/')
+        client = MongoClient('mongodb://voyager:dm95YWdlOnZveWFnZWFp @voyage-db:27017/')
         db = client['voyageSprint1']
         collection = db['processedData']
         data = {'filename': filename, 'image': encoded_image.toBytes(), 'processed_metadata': final_json }
