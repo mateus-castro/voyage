@@ -1,6 +1,6 @@
  {
-    "name": "Paintor",
-    "artStyle": ["expressionism", "german expressionism"],
-    "relatedPaintors" : ["Edward Munch", "Van Gogh", "Anita Malfatti", "Franz Marc", "Paul Klee"],
-    "elements" : ["sky", "trees", "night", "moon"]
+    "name": "Van Gogh",
+    "artStyle": ["expressionism", "german expressionism", "post-impressionism"],
+    "relatedPaintors" : ["Edward Munch", "Anita Malfatti", "Franz Marc", "Paul Klee"],
+    "elements" : ["Head", "Skeleton", "cigarrete"]
 }
