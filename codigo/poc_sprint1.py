@@ -1,4 +1,4 @@
-import boto3
+import subprocess
 import cv2
 import numpy as np
 import mahotas
@@ -7,26 +7,27 @@ import json
 
 
 def get_file_from_bucket(filename, isImage):
-    s3 = boto3.client('s3')
     if isImage: 
-        obj = s3.get_object(Bucket='voyage-bucket1', Key='imagens/expressionismo/van_gogh/' + filename)
-        return cv2.imdecode(np.array(bytearray(obj['Body'].read()), dtype=np.uint8), -1)
+        s3_path = 's3://voyage-bucket1/imagens/expressionismo/van_gogh/{}'.format(filename)
+        subprocess.run(['aws', 's3', 'cp', s3_path, 'temp.jpg'])
+        return cv2.imread('temp.jpg')
     else:
-        obj = s3.get_object(Bucket='my-bucket', Key='my-json.json')
-        return obj['Body'].read().decode('utf-8')
+        s3_path = 's3://my-bucket/my-json.json'
+        subprocess.run(['aws', 's3', 'cp', s3_path, 'temp.json'])
+        with open('temp.json') as f:
+            return json.load(f)
 
 def main():
     filename = 'head_of_a_skeleton_with_a_burning_cigarrete'
-    print("Loadging image from bucket")
+    print("Loading image from bucket")
     image = get_file_from_bucket(filename + ".jpg", True)
     print("Successfully loaded image from bucket")
 
     print("Loading metadata json from bucket")
-    metadata = get_file_from_bucket(filanem + "_pre.json", False)
-    metadata_str = json.loads(metadata)
+    metadata = get_file_from_bucket(filename + "_pre.json", False)
     print("Successfully loaded json from bucket")
 
-    print("processing image")
+    print("Processing image")
     gray = cv2.cvtColor(image, cv2.COLOR_BGR_GRAY)
     mean_color = cv2.mean(gray)
 
@@ -50,12 +51,13 @@ def main():
         "binaryThreshold" : binary_threshold,
         "blurAmount" : blur_amount
     }
-    metadata_str["imageProcessedFeatures"] = imageProcessedFeatures
-    final_json = json.dumps(metadata_str)
-    sucess, encoded_image = cv2.imencode('.jpg', binarized)
-    if sucess:
-        client = MongoClient('mongodb://voyager:dm95YWdlOnZveWFnZWFp @voyage-db:27017/')
+    metadata["imageProcessedFeatures"] = imageProcessedFeatures
+    final_json = json.dumps(metadata)
+    success, encoded_image = cv2.imencode('.jpg', binarized)
+    
+    if success:
+        client = MongoClient('mongodb://voyager:dm95YWdlOnZveWFnZWFp@voyage-db:27017/')
         db = client['voyageSprint1']
         collection = db['processedData']
-        data = {'filename': filename, 'image': encoded_image.toBytes(), 'processed_metadata': final_json }
-        collection.insert(data)
+        data = {'filename': filename, 'image': encoded_image.tostring(), 'processed_metadata': final_json }
+        collection.insert_one(data)
