@@ -1,0 +1,130 @@
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 156.0.0.0/16
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 156.0.1.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 156.0.2.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: PublicRouteTable
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: PrivateRouteTable
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  PublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+  PrivateSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet
+      RouteTableId: !Ref PrivateRouteTable
+  PublicSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow SSH access to bastion EC2 instance
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+  PrivateSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow SSH access to private EC2 instance
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: voyage-bucket
+  BastionKeyPair:
+    Type: AWS::EC2::KeyPair
+    Properties:
+      KeyName: voyage-bastion-key
+      Tags:
+        - Key: Name
+          Value: voyage-bastion-key
+  PrivateKeyPair:
+    Type: AWS::EC2::KeyPair
+    Properties:
+      KeyName: voyage-private-key
+      Tags:
+        - Key: Name
+          Value: voyage-private-key
+  BastionInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-007855ac798b5175e
+      InstanceType: t2.micro
+      SubnetId: !Ref PublicSubnet
+      KeyName: !Ref BastionKeyPair
+      SecurityGroupIds:
+        - !Ref PublicSecurityGroup
+      UserData: !Base64 |
+        #!/bin/bash
+        echo "Hello, World!" >> /var/log/hello-world.log
+  MongoDBInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-007855ac798b5175e
+      InstanceType: t2.micro
+      SubnetId: !Ref PrivateSubnet
+      KeyName: !Ref PrivateKeyPair
+      SecurityGroupIds:
+        - !Ref PrivateSecurityGroup
+      UserData: !Base64 |
+        #!/bin/bash
+        apt-get update
+        apt-get install -y docker.io
+        docker run --name voyage-db -d -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=voyager -e MONGO_INITDB_ROOT_PASSWORD=dm95YWdlOnZveWFnZWFp voyage-db
+  ProcessInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-007855ac798b5175e
+      InstanceType: t2.micro
+      SubnetId: !Ref PrivateSubnet
+      KeyName: !Ref PrivateKeyPair
+      SecurityGroupIds:
+        - !Ref PrivateSecurityGroup
+      UserData: !Base64 |
+        #!/bin/bash
+        apt-get update
+        apt-get install
