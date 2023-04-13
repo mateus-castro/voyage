@@ -8,7 +8,7 @@
         "isBinirazied": true,
         "size": 1024 ,
         "imageColorHistogram" : [[45454545454, 54545454, 54545454, 545454], [3232323232, 32323232, 323232, 2123232]],
-        "threshold_binarization": 431,
+        "thresholdBinarization": 431,
         "blurAmount" : 313
     }
 }
