@@ -61,3 +61,6 @@ def main():
         collection = db['processedData']
         data = {'filename': filename, 'image': encoded_image.tostring(), 'processed_metadata': final_json }
         collection.insert_one(data)
+
+if __name__ == '__main__':
+    main()

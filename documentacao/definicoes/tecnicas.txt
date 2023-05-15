@@ -1,0 +1,5 @@
+Métodos de processamento de imagem:
+Utilização de tons de cinza, blur, binarização, média de histogramas de imagem, média de histogramas de cores, contraste, encontro de contornos e classificação dos mesmos em objetos.
+
+Métodos de comitê
+Nesses métodos, diferentes árvores são geradas, a partir de amostragens do conjunto de dados original, tanto em colunas quanto linhas. Com vários processos decisórios ocorrendo simultaneamente, decisões erradas tendem a se diluir e, em média, obtemos resultados mais confiáveis do que com uma árvore só. Além disso, evitamos que variáveis de maior peso deixem o modelo enviesado, e que dados com valores estranhos (outliers) atrapalhem a modelagem. No final, a categoria de um objeto é aquela atribuída pela maioria das árvores do comitê.
