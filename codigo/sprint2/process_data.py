@@ -11,7 +11,7 @@ def main():
 
     painter = input("what painter work is being processed: ")
     extension = input("what is the file extension of the images: ")
-
+    
     images_list = []
     print("Loading images")
     for x in range(1, NUM_IMAGES + 1):
