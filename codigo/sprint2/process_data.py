@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import json
 
-NUM_IMAGES = 9
+NUM_IMAGES = 10
 
 def main():
     print("Batch processing 10 files...")
@@ -14,6 +14,7 @@ def main():
     
     images_list = []
     print("Loading images")
+    # Roda para cada imagem
     for x in range(1, NUM_IMAGES + 1):
         print("image " + str(x) + " processed")
         images_list.append(cv2.imread('images/' + str(x) + '.' + extension))

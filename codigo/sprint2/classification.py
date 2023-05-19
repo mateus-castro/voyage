@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
 
-def plot(model, artist_list, X_test, y_test):
+def plot(model, artist_list, X_test, y_test, model_name):
     unique_artists, artist_counts = np.unique(artist_list, return_counts=True)
 
     predicted_artists = model.predict(X_test)
@@ -19,7 +19,7 @@ def plot(model, artist_list, X_test, y_test):
     percentages = [count / total_count * 100 for count in predicted_artist_counts]
 
     plt.bar(unique_predicted_artists, percentages)
-    plt.title('Porcentagem dos Artistas Previstos (Decision Tree)')
+    plt.title('Porcentagem dos Artistas Previstos'+ model_name)
     plt.xlabel('Artista Previsto')
     plt.ylabel('Porcentagem')
     plt.xticks(rotation=90)
@@ -42,7 +42,7 @@ def plot(model, artist_list, X_test, y_test):
         for j in range(len(unique_artists)):
             ax.text(j, i, conf_matrix[i, j], ha='center', va='center', color='white')
 
-    plt.title('Matriz de Confusão (Decision Tree)')
+    plt.title('Matriz de Confusão'+ model_name)
     plt.colorbar(im, label='Contagem')
     plt.xlabel('Artista Previsto')
     plt.ylabel('Artista Real')
@@ -119,6 +119,6 @@ def main():
     forest_accuracy = accuracy_score(y_test, forest_predictions)
     print("Accuracy (Random Forest):", forest_accuracy)
     
-    plot(tree_model, artist_list, X_test, y_test)
-    plot(forest_model, artist_list, X_test, y_test)
+    plot(tree_model, artist_list, X_test, y_test, "(Decision Tree)")
+    plot(forest_model, artist_list, X_test, y_test, "(Random Forest)")
 main()
