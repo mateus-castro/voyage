@@ -15,44 +15,44 @@ Resources:
       VpcId: !Ref VPC
       CidrBlock: 156.0.2.0/24
       AvailabilityZone: !Select [1, !GetAZs '']
-  InternetGateway:
-    Type: AWS::EC2::InternetGateway
-  VPCGatewayAttachment:
-    Type: AWS::EC2::VPCGatewayAttachment
-    Properties:
-      VpcId: !Ref VPC
-      InternetGatewayId: !Ref InternetGateway
-  PublicRouteTable:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !Ref VPC
-      Tags:
-        - Key: Name
-          Value: PublicRouteTable
-  PrivateRouteTable:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !Ref VPC
-      Tags:
-        - Key: Name
-          Value: PrivateRouteTable
-  PublicRoute:
-    Type: AWS::EC2::Route
-    DependsOn: VPCGatewayAttachment
-    Properties:
-      RouteTableId: !Ref PublicRouteTable
-      DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !Ref InternetGateway
-  PublicSubnetRouteTableAssociation:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      SubnetId: !Ref PublicSubnet
-      RouteTableId: !Ref PublicRouteTable
-  PrivateSubnetRouteTableAssociation:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      SubnetId: !Ref PrivateSubnet
-      RouteTableId: !Ref PrivateRouteTable
+  # InternetGateway:
+  #   Type: AWS::EC2::InternetGateway
+  # # VPCGatewayAttachment:
+  # #   Type: AWS::EC2::VPCGatewayAttachment
+  # #   Properties:
+  # #     VpcId: !Ref VPC
+  # #     InternetGatewayId: !Ref InternetGateway
+  # PublicRouteTable:
+  #   Type: AWS::EC2::RouteTable
+  #   Properties:
+  #     VpcId: !Ref VPC
+  #     Tags:
+  #       - Key: Name
+  #         Value: PublicRouteTable
+  # PrivateRouteTable:
+  #   Type: AWS::EC2::RouteTable
+  #   Properties:
+  #     VpcId: !Ref VPC
+  #     Tags:
+  #       - Key: Name
+  #         Value: PrivateRouteTable
+  # PublicRoute:
+  #   Type: AWS::EC2::Route
+  #   # DependsOn: VPCGatewayAttachment
+  #   Properties:
+  #     RouteTableId: !Ref PublicRouteTable
+  #     DestinationCidrBlock: 0.0.0.0/0
+  #     GatewayId: !Ref InternetGateway
+  # PublicSubnetRouteTableAssociation:
+  #   Type: AWS::EC2::SubnetRouteTableAssociation
+  #   Properties:
+  #     SubnetId: !Ref PublicSubnet
+  #     RouteTableId: !Ref PublicRouteTable
+  # PrivateSubnetRouteTableAssociation:
+  #   Type: AWS::EC2::SubnetRouteTableAssociation
+  #   Properties:
+  #     SubnetId: !Ref PrivateSubnet
+  #     RouteTableId: !Ref PrivateRouteTable
   PublicSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:

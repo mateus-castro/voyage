@@ -1,0 +1,109 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: '10.0.0.0/16'
+  
+  SubnetPrivate:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: '10.0.1.0/24'
+  
+  SubnetPublic:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: '10.0.2.0/24'
+      MapPublicIpOnLaunch: true
+  
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+  
+  VPCGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+  
+  RouteTablePrivate:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+  
+  RouteTablePublic:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref VPC
+  
+  SubnetRouteTableAssociationPrivate:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SubnetPrivate
+      RouteTableId: !Ref RouteTablePrivate
+  
+  SubnetRouteTableAssociationPublic:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref SubnetPublic
+      RouteTableId: !Ref RouteTablePublic
+  
+  PrivateSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: 'Security group for private instances'
+      VpcId: !Ref VPC
+  
+  PublicSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: 'Security group for public instance'
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: voyage-bucket-test
+  
+  ProcessInstance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: 'ami-007855ac798b5175e'
+      InstanceType: 't2.micro'
+      SubnetId: !Ref SubnetPrivate
+      KeyName: 'voyage-private'
+      SecurityGroupIds:
+        - !Ref PrivateSecurityGroup
+
+  MongoDBInstance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: 'ami-007855ac798b5175e'
+      InstanceType: 't2.micro'
+      SubnetId: !Ref SubnetPrivate
+      KeyName: 'voyage-private'
+      SecurityGroupIds:
+        - !Ref PrivateSecurityGroup
+  
+  PublicInstance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: 'ami-007855ac798b5175e'
+      InstanceType: 't2.micro'
+      SubnetId: !Ref SubnetPublic
+      KeyName: 'voyage-public'
+      SecurityGroupIds:
+        - !Ref PublicSecurityGroup
+  
+  PublicInstanceRoute:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref RouteTablePublic
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId: !Ref InternetGateway
