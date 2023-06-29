@@ -1,4 +1,16 @@
 # voyage
+<!-- 
+oq fazer antes de rodar o .yaml:
+	criar as chaves .pem com os nomes: "voyage-private.pem" e "voyage-public.pem"
+
+etapas para realizar após o cloudformation:
+
+adicionar os ips elásticos no security group privado -> só colocar o tipo de protocolo como TCP personalizado o id do sg como ip pra permissão
+
+jogar a chave .pem privada pra todas as máquinas
+scp -i <chave_pem_acesso>.pem ./<chave_envio>.pem ubuntu@<ip_instancia>:~
+
+-->
 
 # instruções para levantar o docker mongo
 docker build -t voyage-db . # executar com os arquivos Dockerfile e mongodb.conf no diretório

@@ -55,7 +55,7 @@ Resources:
     Properties:
       GroupDescription: 'Security group for private instances'
       VpcId: !Ref VPC
-      
+
   PublicSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -79,7 +79,7 @@ Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: voyage-bucket-test
+      BucketName: voyage-bucket
   
 # ec2 instances
   ProcessInstance:
