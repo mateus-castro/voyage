@@ -49,12 +49,13 @@ Resources:
       SubnetId: !Ref SubnetPublic
       RouteTableId: !Ref RouteTablePublic
   
+# security groups
   PrivateSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: 'Security group for private instances'
       VpcId: !Ref VPC
-  
+      
   PublicSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -65,12 +66,22 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
 
+# s3 bucket
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: voyage-bucket-test
   
+# ec2 instances
   ProcessInstance:
     Type: 'AWS::EC2::Instance'
     Properties:
@@ -80,6 +91,10 @@ Resources:
       KeyName: 'voyage-private'
       SecurityGroupIds:
         - !Ref PrivateSecurityGroup
+      UserData: !Base64 |
+        #!/bin/bash
+        apt-get update
+        apt-get upgrade
 
   MongoDBInstance:
     Type: 'AWS::EC2::Instance'
@@ -90,6 +105,11 @@ Resources:
       KeyName: 'voyage-private'
       SecurityGroupIds:
         - !Ref PrivateSecurityGroup
+      UserData: !Base64 |
+        #!/bin/bash
+        apt-get update
+        apt-get install -y docker.io
+        docker run --name voyage-db -d -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=voyager -e MONGO_INITDB_ROOT_PASSWORD=dm95YWdlOnZveWFnZWFp voyage-db
   
   PublicInstance:
     Type: 'AWS::EC2::Instance'
@@ -100,7 +120,48 @@ Resources:
       KeyName: 'voyage-public'
       SecurityGroupIds:
         - !Ref PublicSecurityGroup
+      UserData: !Base64 |
+        #!/bin/bash
+        apt-get update
+        apt-get upgrade
   
+# elastic IPs association
+  ProcessInstanceEIP:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: vpc
+
+  ProcessInstanceEIPAssociation:
+    Type: 'AWS::EC2::EIPAssociation'
+    Properties:
+      AllocationId: !GetAtt ProcessInstanceEIP.AllocationId
+      InstanceId: !Ref ProcessInstance
+  
+
+  MongoDBInstanceEIP:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: vpc
+
+  MongoDBInstanceEIPAssociation:
+    Type: 'AWS::EC2::EIPAssociation'
+    Properties:
+      AllocationId: !GetAtt MongoDBInstanceEIP.AllocationId
+      InstanceId: !Ref MongoDBInstance
+    
+
+  PublicInstanceEIP:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: vpc
+
+  PublicInstanceEIPAssociation:
+    Type: 'AWS::EC2::EIPAssociation'
+    Properties:
+      AllocationId: !GetAtt PublicInstanceEIP.AllocationId
+      InstanceId: !Ref PublicInstance
+
+# route tables
   PublicInstanceRoute:
     Type: 'AWS::EC2::Route'
     Properties:
