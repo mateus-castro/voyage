@@ -1,5 +1,9 @@
 import cv2
 import numpy as np
+import cv2
+import easyocr
+
+reader = easyocr.Reader(['en'])
 
 # Carregar a imagem
 image = cv2.imread("images/argent06.jpg")
