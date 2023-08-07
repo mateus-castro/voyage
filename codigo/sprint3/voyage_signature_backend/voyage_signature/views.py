@@ -4,16 +4,24 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 from django.http import JsonResponse
-from .classification import main
+from .main_model import main
+from .main_disponib import main_disp
 
-filepath = '../../sprint2/classification.py'
+def backend_show_model(request):
 
-def hello_world(request):
-
-    tree_accuracy, forest_accuracy = main()
+    model_info = main()
     response = {
-        "tree_accuracy" : tree_accuracy,
-        "forest_accurracy" : forest_accuracy
+        "model_training_info" : model_info
     }
 
     return JsonResponse(response, status=200)
+
+def backend_disponib(request):
+    disponib = main()
+    response = {
+        "disponib" : disponib
+    }
+
+    return JsonResponse(response, status=200)
+
+    

@@ -20,5 +20,6 @@ from voyage_signature.views import hello_world
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('hello/', hello_world),
+    path('main_model/', main_model),
+    path('main_disponib/', hello_world),
 ]
