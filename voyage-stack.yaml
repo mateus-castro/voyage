@@ -48,14 +48,8 @@ Resources:
     Properties:
       SubnetId: !Ref SubnetPublic
       RouteTableId: !Ref RouteTablePublic
-  
-# security groups
-  PrivateSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
-    Properties:
-      GroupDescription: 'Security group for private instances'
-      VpcId: !Ref VPC
 
+# bastion config
   PublicSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -74,42 +68,6 @@ Resources:
           FromPort: 8080
           ToPort: 8080
           CidrIp: 0.0.0.0/0
-
-# s3 bucket
-  S3Bucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: voyage-bucket
-  
-# ec2 instances
-  ProcessInstance:
-    Type: 'AWS::EC2::Instance'
-    Properties:
-      ImageId: 'ami-007855ac798b5175e'
-      InstanceType: 't2.micro'
-      SubnetId: !Ref SubnetPrivate
-      KeyName: 'voyage-private'
-      SecurityGroupIds:
-        - !Ref PrivateSecurityGroup
-      UserData: !Base64 |
-        #!/bin/bash
-        apt-get update
-        apt-get upgrade
-
-  MongoDBInstance:
-    Type: 'AWS::EC2::Instance'
-    Properties:
-      ImageId: 'ami-007855ac798b5175e'
-      InstanceType: 't2.micro'
-      SubnetId: !Ref SubnetPrivate
-      KeyName: 'voyage-private'
-      SecurityGroupIds:
-        - !Ref PrivateSecurityGroup
-      UserData: !Base64 |
-        #!/bin/bash
-        apt-get update
-        apt-get install -y docker.io
-        docker run --name voyage-db -d -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=voyager -e MONGO_INITDB_ROOT_PASSWORD=dm95YWdlOnZveWFnZWFp voyage-db
   
   PublicInstance:
     Type: 'AWS::EC2::Instance'
@@ -122,33 +80,68 @@ Resources:
         - !Ref PublicSecurityGroup
       UserData: !Base64 |
         #!/bin/bash
-        apt-get update
-        apt-get upgrade
+        sudo apt-get update
+        sudo apt-get upgrade
+        git clone https://github.com/mateus-castro/voyage.git
+
+# s3 bucket
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: voyage-bucket
   
-# elastic IPs association
-  ProcessInstanceEIP:
-    Type: 'AWS::EC2::EIP'
+# private groups
+  PrivateSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
     Properties:
-      Domain: vpc
+      GroupDescription: 'Security group for private instances'
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          SourceSecurityGroupId: !GetAtt PublicSecurityGroup.GroupId
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !GetAtt PublicSecurityGroup.GroupId
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          SourceSecurityGroupId: !GetAtt PublicSecurityGroup.GroupId
 
-  ProcessInstanceEIPAssociation:
-    Type: 'AWS::EC2::EIPAssociation'
+# private instances
+  ProcessInstance:
+    Type: 'AWS::EC2::Instance'
     Properties:
-      AllocationId: !GetAtt ProcessInstanceEIP.AllocationId
-      InstanceId: !Ref ProcessInstance
-  
+      ImageId: 'ami-007855ac798b5175e'
+      InstanceType: 't2.micro'
+      SubnetId: !Ref SubnetPrivate
+      KeyName: 'voyage-private'
+      SecurityGroupIds:
+        - !Ref PrivateSecurityGroup
+      UserData: !Base64 |
+        #!/bin/bash
+        sudo apt-get update
+        sudo apt-get upgrade
+        git clone https://github.com/mateus-castro/voyage.git
 
-  MongoDBInstanceEIP:
-    Type: 'AWS::EC2::EIP'
+  MongoDBInstance:
+    Type: 'AWS::EC2::Instance'
     Properties:
-      Domain: vpc
-
-  MongoDBInstanceEIPAssociation:
-    Type: 'AWS::EC2::EIPAssociation'
-    Properties:
-      AllocationId: !GetAtt MongoDBInstanceEIP.AllocationId
-      InstanceId: !Ref MongoDBInstance
-    
+      ImageId: 'ami-007855ac798b5175e'
+      InstanceType: 't2.micro'
+      SubnetId: !Ref SubnetPrivate
+      KeyName: 'voyage-private'
+      SecurityGroupIds:
+        - !Ref PrivateSecurityGroup
+      UserData: !Base64 |
+        #!/bin/bash
+        sudo apt-get update
+        sudo apt-get upgrade
+        git clone https://github.com/mateus-castro/voyage.git
+        sudo apt-get install -y docker.io
+        docker run --name voyage-db -d -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=voyager -e MONGO_INITDB_ROOT_PASSWORD=dm95YWdlOnZveWFnZWFp voyage-db
 
   PublicInstanceEIP:
     Type: 'AWS::EC2::EIP'
@@ -161,6 +154,11 @@ Resources:
       AllocationId: !GetAtt PublicInstanceEIP.AllocationId
       InstanceId: !Ref PublicInstance
 
+  NATEIP:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: vpc
+
 # route tables
   PublicInstanceRoute:
     Type: 'AWS::EC2::Route'
@@ -168,3 +166,17 @@ Resources:
       RouteTableId: !Ref RouteTablePublic
       DestinationCidrBlock: '0.0.0.0/0'
       GatewayId: !Ref InternetGateway
+
+  NATGateway:
+    Type: 'AWS::EC2::NatGateway'
+    Properties:
+      AllocationId: !GetAtt NATEIP.AllocationId
+      SubnetId: !Ref SubnetPublic
+  
+  PrivateInstanceRouteToInternet:
+    Type: 'AWS::EC2::Route'
+    DependsOn: NATGateway
+    Properties:
+      RouteTableId: !Ref RouteTablePrivate
+      DestinationCidrBlock: '0.0.0.0/0'
+      NatGatewayId: !Ref NATGateway
