@@ -16,10 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from voyage_signature.views import hello_world
+from voyage_signature.views import backend_show_model
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('main_model/', main_model),
-    path('main_disponib/', hello_world),
+    path('main_model/', backend_show_model),
+    # path('main_disponib/', hello_world),
 ]

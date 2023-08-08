@@ -4,14 +4,22 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 from django.http import JsonResponse
-from .main_model import main
-from .main_disponib import main_disp
+from .main_model import Processador
+# from .main_disponib import main_disp
+
+processador = Processador()
 
 def backend_show_model(request):
 
-    model_info = main()
+    knn_model_accuracy, vocab_size_percentage, test_size, n_neighbors = processador.show_model()
+    # main_info = main()
+    
     response = {
-        "model_training_info" : model_info
+        # "model_training_info" : model_info
+        "knn_model_accuracy": knn_model_accuracy,
+        "vocab_size_percentage": vocab_size_percentage,
+        "test_size": test_size,
+        "n_neighbors": n_neighbors
     }
 
     return JsonResponse(response, status=200)
