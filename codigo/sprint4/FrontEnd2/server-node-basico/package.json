@@ -1,0 +1,19 @@
+{
+  "name": "serverbasico",
+  "version": "1.0.0",
+  "description": "Server Node basico multi uso",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run swagger-autogen & nodemon -L index.js",
+    "swagger-autogen": "node swagger.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gabriel Gameiro",
+  "license": "ISC",
+  "dependencies": {
+    "express": "4.17.1",
+    "nodemon": "2.0.12",
+    "swagger-autogen": "2.11.2",
+    "swagger-ui-express": "4.1.6"
+  }
+}

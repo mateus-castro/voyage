@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voyage</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header class="p-3 bg-dark text-white">
+        <div class="container">
+            <div class="d-flex justify-content-between">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none me-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+                        style="fill: rgba(255, 255, 255, 1);">
+                        <path
+                            d="M2.76 20.2a2.73 2.73 0 0 0 2.15.85 8.86 8.86 0 0 0 3.37-.86 9 9 0 0 0 12.27-10.9c1.31-2.23 1.75-4.26.67-5.48a2.94 2.94 0 0 0-2.57-1A5 5 0 0 0 16.1 4 9 9 0 0 0 3.58 15.14c-1.06 1.21-2.05 3.68-.82 5.06zm1.5-1.32c-.22-.25 0-1.07.37-1.76a9.26 9.26 0 0 0 1.57 1.74c-1.03.3-1.71.28-1.94.02zm14.51-5.17A7 7 0 0 1 15.58 18 7.12 7.12 0 0 1 12 19a6.44 6.44 0 0 1-1.24-.13 30.73 30.73 0 0 0 4.42-3.29 31.5 31.5 0 0 0 3.8-4 6.88 6.88 0 0 1-.21 2.13zm.09-8.89a.94.94 0 0 1 .87.32c.23.26.16.94-.26 1.93a9.2 9.2 0 0 0-1.61-1.86 2.48 2.48 0 0 1 1-.39zM5.22 10.31A6.94 6.94 0 0 1 8.41 6 7 7 0 0 1 12 5a6.9 6.9 0 0 1 6 3.41 5.19 5.19 0 0 1 .35.66 27.43 27.43 0 0 1-4.49 5A27.35 27.35 0 0 1 8.35 18a7 7 0 0 1-3.13-7.65z">
+                        </path>
+                    </svg>
+                    Projeto Voyage
+                </a>
+
+
+                <div class="text-end">
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><u><a href="#" class="nav-link px-2 text-white">Home</a></u></li>
+                        <li><a href="#" class="nav-link px-2 text-white">Documentação</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <section class="py-5 text-center container">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <h1 class="fw-light">Bem-vindo ao Projeto Voyage!</h1>
+                    <p class="lead text-muted">
+                        Descubra a origem de assinaturas em obras de artes, seja de humanos ou IAs. Teste agora mesmo
+                        abaixo e nos ajude a melhorar.</p>
+                    <p>
+                        <button class="btn btn-outline-primary" data-bs-toggle="collapse"
+                            data-bs-target="#formulario">Testar imagem</button>
+                    </p>
+                </div>
+
+            </div>
+            <div class="row py-lg-4 card card-body collapse" id="formulario">
+                <div class="col-lg-6 col-md-8 mx-auto mb-4">
+                    <label for="inptFile" class="form-label">Imagem</label>
+                    <input type="file" class="form-control" id="inptFile">
+                </div>
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <button id="btnVerificar" class="btn btn-primary">Verificar origem</button>
+
+                    <div id="divResposta" class="col-lg-6 col-md-8 mx-auto">
+                        <h3 id="respostaHumano" class="mb-4">
+                            <u class="text-success">Origem humana!</u>
+                        </h3>
+                        <h3 id="respostaIA">
+                            <u class="text-danger">Origem IA!</u>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-muted py-5">
+        <div class="container">
+            <p class="float-end mb-1">
+                <a href="#">Voltar ao topo.</a>
+            </p>
+            <p class="mb-1">O projeto Voyage foi desenvolvido como TCC por alunos do curso de ciência da computação.</p>
+            <p class="mb-0">Quer saber mais? <a href="/">Visite a página da nossa documentação.</p>
+        </div>
+    </footer>
+</body>
+
+</html>
+
+<script>
+    var btnVerificar;
+    var divResposta;
+    var respostaHumano;
+    var respostaIA;
+
+    $(document).ready(function () {
+        btnVerificar = $('#btnVerificar');
+        divResposta = $('#divResposta');
+        respostaHumano = $('#respostaHumano');
+        respostaIA = $('#respostaIA');
+
+        divResposta.hide();
+        respostaHumano.hide();
+        respostaIA.hide();
+
+        btnVerificar.on('click', () => {
+            verificarImagem();
+        });
+    });
+
+    function verificarImagem() {
+        const url = `${window.location.href}processar-img`;
+        const file = $('#inptFile').val();
+
+        $.post(url, { singleFile: file })
+            .done(function (data) {
+                const resultadoOrigem = data.origem;
+
+                btnVerificar.hide();
+                divResposta.show();
+
+                if(resultadoOrigem == "Humano") {
+                    respostaHumano.show();
+                }
+                else if (resultadoOrigem == "IA") {
+                    respostaIA.show();
+                }
+            })
+            .fail(function () {
+                alert("Erro");
+            })
+            .always(function(data) {
+                console.log("Retorno: ", data);
+            });
+    }
+
+</script>
