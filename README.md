@@ -44,3 +44,7 @@ n_neighbors 		-> número de neighbors pro KNN
 	vocab_size_percentage: 14
 	test_size: 0.1814186208012823
 	n_neighbors: 3
+
+### cnn - proposta professor américo
+	val_loss: 0.1494
+	val_accuracy: 0.9318
