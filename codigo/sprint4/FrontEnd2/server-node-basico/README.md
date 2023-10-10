@@ -4,5 +4,5 @@ Servidor Node para acelerar novos desenvolvimentos e para teste de tecnologias c
 # Para montar o docker file
 1. Instalar docker na máquina
 2. Entrar na pasta do Dockerfile
-3. Rodar docker build . -t node-web-app
-4. Rodar docker run -p 80:80 -d node-web-app
+3. Rodar sudo docker build . -t node-web-app
+4. Rodar sudo docker run -p 80:80 -d node-web-app

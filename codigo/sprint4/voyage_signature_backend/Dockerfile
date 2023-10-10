@@ -1,7 +1,9 @@
 
 # Use a imagem Alpine Linux como base
-FROM python:3
+FROM python:3.10.2
 EXPOSE 8000
+
+RUN sudo apt-get update && sudo apt-get install -y libgl1-mesa-glx
 
 # Define o diretório de trabalho dentro do contêiner
 WORKDIR /app
