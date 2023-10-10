@@ -14,7 +14,7 @@
   "consumes": [],
   "produces": [],
   "paths": {
-    "/": {
+    "/health-check": {
       "get": {
         "tags": [],
         "description": "",
@@ -34,7 +34,7 @@
         "description": "Endpoint para processamento da imagem no modelo da Voyager.",
         "parameters": [
           {
-            "name": "singleFile",
+            "name": "imagem",
             "type": "file",
             "required": "true",
             "description": "Imagem a ser processada.",
@@ -42,13 +42,23 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
     },
-    "/home": {
+    "/dados-modelo": {
+      "get": {
+        "tags": [
+          "Processamento de imagens"
+        ],
+        "description": "Endpoint para verificar acuracidade atual do modelo usado pelo projeto.",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/": {
       "get": {
         "tags": [],
         "description": "",
