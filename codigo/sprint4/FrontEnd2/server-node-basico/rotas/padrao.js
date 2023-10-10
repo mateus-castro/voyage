@@ -44,7 +44,7 @@ module.exports = (app) => {
                         console.log("Erro ao chamar Backend!");
                     }
 
-                    if (responseBack.statusCode === 200) {
+                    if (responseBack && responseBack.statusCode === 200) {
                         console.log("Sucesso ao chamar Backend!");
                     }
 

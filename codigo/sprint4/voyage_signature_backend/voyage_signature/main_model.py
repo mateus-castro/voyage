@@ -23,7 +23,7 @@ class Processador:
         prediction = 'human'
 
     print(f'prediction result: {result[0][0] == 1} - {prediction}')
-    return result[0][0] == 1
+    return result[0][0] != 1
   
   def show_model(self):
     return enum_as_options(CNNModel)
