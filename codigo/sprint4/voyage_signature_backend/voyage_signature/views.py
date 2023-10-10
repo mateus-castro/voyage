@@ -24,7 +24,7 @@ def backend_disponib(request):
             arquivoLido = arquivo.read()
             print("arquivo lido!")
 
-            response = {"origem_ia": processador.processar(arquivoLido)}
+            response = {"origem_humana": not processador.processar(arquivoLido)}
 
             return JsonResponse(response, status=200)
         else:
