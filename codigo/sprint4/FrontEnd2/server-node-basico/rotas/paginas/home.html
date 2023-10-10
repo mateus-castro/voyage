@@ -131,12 +131,12 @@
         
         $.ajax(configs)
             .done(function (data) {
-                const origemHumana = JSON.parse(data)["origem_humana"];
+                const origemIa = JSON.parse(data)["origem_humana"];
 
                 //btnVerificar.hide();
                 divResposta.show();
 
-                if (origemHumana) {
+                if (origemIa) {
                     respostaHumano.show();
                     respostaIA.hide();
                 }
