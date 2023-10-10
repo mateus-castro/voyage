@@ -17,11 +17,12 @@ class Processador:
     
     result = self.cnn.predict(image)
 
-    # if result[0][0] == 1:
-    #     prediction = 'ia'
-    # else:
-    #     prediction = 'human'
+    if result[0][0] == 1:
+        prediction = 'ia'
+    else:
+        prediction = 'human'
 
+    print(f'prediction result: {result[0][0] == 1} - {prediction}')
     return result[0][0] == 1
   
   def show_model(self):
