@@ -137,12 +137,12 @@
                 divResposta.show();
 
                 if (origemIa) {
-                    respostaHumano.show();
-                    respostaIA.hide();
-                }
-                else {
                     respostaIA.show();
                     respostaHumano.hide();
+                }
+                else {
+                    respostaHumano.show();
+                    respostaIA.hide();
                 }
             })
             .fail(function () {
