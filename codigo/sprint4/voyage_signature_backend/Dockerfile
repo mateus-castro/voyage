@@ -1,6 +1,6 @@
 
 # Use a imagem Alpine Linux como base
-FROM python:3.7-alpine
+FROM python:3
 EXPOSE 8000
 
 # Define o diretório de trabalho dentro do contêiner
