@@ -39,7 +39,7 @@ def backend_disponib(request):
     
             resultado_processamento = processador.processar(arquivoLido)
             response = {
-                "origem_humana": bool(resultado_processamento[0])
+                "origem_humana": not bool(resultado_processamento[0])
             }
 
             return JsonResponse(response, status=200)
