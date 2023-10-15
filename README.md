@@ -40,7 +40,7 @@ n_neighbors 		-> número de neighbors pro KNN
 	n_neighbors=3
 
 ### v2
-	knn_model_accuracy - 0.88
+	knn_model_accuracy - 0.80
 	vocab_size_percentage: 14
 	test_size: 0.1814186208012823
 	n_neighbors: 3
